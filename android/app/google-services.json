@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231653740465",
+    "project_id": "migaskita-ff09c",
+    "storage_bucket": "migaskita-ff09c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231653740465:android:2b0628da010f7804bbf790",
+        "android_client_info": {
+          "package_name": "com.example.flutter_migaskita"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv3EesMMv8bRn1-pOImKo9zHO1E8FDXIU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
