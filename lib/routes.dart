@@ -6,7 +6,7 @@ import 'package:flutter_migaskita/presentation/pages/employee/home_page.dart';
 class Routes {
   static const String login = '/login';
   static const String signUp = '/sign_up';
-  static const String home = '/home';
+  static const String employeeHome = '/employee-home';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -14,10 +14,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => LoginPage());
       case signUp:
         return MaterialPageRoute(builder: (_) => SignUpPage());
-      case home:
-        return MaterialPageRoute(
-          builder: (_) => EmployeeHomePage(),
-        ); // Sesuaikan dengan role
+      case employeeHome:
+        return MaterialPageRoute(builder: (_) => EmployeeHomePage());
       default:
         return MaterialPageRoute(
           builder:
@@ -29,6 +27,4 @@ class Routes {
         );
     }
   }
-
-  static EmployeeHomePage() {}
 }

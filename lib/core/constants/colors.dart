@@ -11,4 +11,6 @@ class AppColors {
     0xFF1E3A8A,
   ); // Biru tua untuk teks "ptgm" dan tautan
   static const purple = Color(0xFF6B46C1);
+  static const cardBackground = Color(0xFFECF0F7); // Latar belakang card
+  static const navBarIcon = Color(0xFF6B7280); // Warna ikon navbar
 }

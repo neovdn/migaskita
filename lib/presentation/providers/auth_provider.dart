@@ -3,27 +3,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_migaskita/domain/usecases/auth/sign_in.dart';
 import 'package:flutter_migaskita/domain/usecases/auth/sign_up.dart';
 import 'package:flutter_migaskita/domain/usecases/auth/sign_out.dart';
+import 'package:flutter_migaskita/domain/usecases/user/get_user.dart';
+import 'package:provider/provider.dart';
+import '../providers/user_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
   final SignIn signIn;
   final SignUp signUp;
   final SignOut signOut;
+  final GetUser getUser;
+
   User? _user;
 
-  AuthProvider(this.signIn, this.signUp, this.signOut);
+  AuthProvider(this.signIn, this.signUp, this.signOut, this.getUser);
 
   User? get user => _user;
 
-  Future<void> signInUser({
+  Future<bool> signInUser({
     required String email,
     required String password,
+    required BuildContext context,
   }) async {
     try {
       final userCredential = await signIn(email, password);
       _user = userCredential.user;
       notifyListeners();
+
+      // Ambil data dari Firestore
+      final userData = await getUser(_user!.uid);
+
+      // Simpan ke UserProvider
+      Provider.of<UserProvider>(context, listen: false).setUser(userData);
+
+      return true;
     } catch (e) {
-      throw Exception('Login failed: $e');
+      print('LOGIN ERROR: $e'); // Tambahkan log ini
+      _user = null;
+      notifyListeners();
+      return false;
     }
   }
 
@@ -47,9 +64,10 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> signOutUser() async {
+  Future<void> signOutUser(BuildContext context) async {
     await signOut();
     _user = null;
+    Provider.of<UserProvider>(context, listen: false).clearUser();
     notifyListeners();
   }
 }

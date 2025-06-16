@@ -1,31 +1,44 @@
+import '../../domain/entities/user.dart';
+
 class UserModel {
   final String id;
-  final String email;
   final String name;
+  final String phone;
+  final String email;
   final String role;
-  final DateTime createdAt;
 
   UserModel({
     required this.id,
-    required this.email,
     required this.name,
+    required this.phone,
+    required this.email,
     required this.role,
-    required this.createdAt,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    id: json['id'],
-    email: json['email'],
-    name: json['name'],
-    role: json['role'],
-    createdAt: DateTime.parse(json['createdAt']),
+    id: json['id'] ?? '',
+    name: json['name'] ?? '',
+    phone: json['phone'] ?? '',
+    email: json['email'] ?? '',
+    role: json['role'] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
     'id': id,
-    'email': email,
     'name': name,
+    'phone': phone,
+    'email': email,
     'role': role,
-    'createdAt': createdAt.toIso8601String(),
   };
+
+  User toEntity() =>
+      User(id: id, name: name, phone: phone, email: email, role: role);
+
+  static UserModel fromEntity(User user) => UserModel(
+    id: user.id,
+    name: user.name,
+    phone: user.phone,
+    email: user.email,
+    role: user.role,
+  );
 }
