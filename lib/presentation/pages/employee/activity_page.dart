@@ -193,7 +193,7 @@ class _EmployeeActivityPageState extends State<EmployeeActivityPage> {
                         const SizedBox(height: 12),
                         _buildMenuTile(Icons.description, "Pengajuan Cuti"),
                         const SizedBox(height: 12),
-                        _buildMenuTile(Icons.mail, "Riwayat Aktivitas"),
+                        _buildMenuTile(Icons.mail, "Hasil"),
                       ],
                     ),
                   const SizedBox(height: 30),

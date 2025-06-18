@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_migaskita/presentation/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/custom_text_field.dart';
@@ -47,7 +48,13 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     if (success) {
-      Navigator.pushReplacementNamed(context, '/employee-home');
+      final userRole =
+          Provider.of<UserProvider>(context, listen: false).user?.role;
+      if (userRole == 'admin') {
+        Navigator.pushReplacementNamed(context, '/admin-home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/employee-home');
+      }
     } else {
       _showSnackBar('Email atau password salah');
     }

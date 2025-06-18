@@ -29,15 +29,20 @@ class AuthProvider extends ChangeNotifier {
       _user = userCredential.user;
       notifyListeners();
 
-      // Ambil data dari Firestore
       final userData = await getUser(_user!.uid);
 
-      // Simpan ke UserProvider
       Provider.of<UserProvider>(context, listen: false).setUser(userData);
+
+      // 🔥 Navigasi berdasarkan role
+      if (userData.role == 'admin') {
+        Navigator.pushReplacementNamed(context, '/admin-home');
+      } else {
+        Navigator.pushReplacementNamed(context, '/employee-home');
+      }
 
       return true;
     } catch (e) {
-      print('LOGIN ERROR: $e'); // Tambahkan log ini
+      print('LOGIN ERROR: $e');
       _user = null;
       notifyListeners();
       return false;
