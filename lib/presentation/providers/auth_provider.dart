@@ -5,6 +5,7 @@ import 'package:flutter_migaskita/domain/usecases/auth/sign_up.dart';
 import 'package:flutter_migaskita/domain/usecases/auth/sign_out.dart';
 import 'package:flutter_migaskita/domain/usecases/user/get_user.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/user_provider.dart';
 
 class AuthProvider extends ChangeNotifier {
@@ -33,7 +34,19 @@ class AuthProvider extends ChangeNotifier {
 
       Provider.of<UserProvider>(context, listen: false).setUser(userData);
 
-      // 🔥 Navigasi berdasarkan role
+      // ✅ Simpan status login dan role
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_logged_in', true);
+      await prefs.setString('user_role', userData.role);
+
+      // ✅ Simpan user data agar bisa dipulihkan di initial load
+      await prefs.setString('user_id', userData.id);
+      await prefs.setString('user_name', userData.name);
+      await prefs.setString('user_email', userData.email);
+      await prefs.setString('user_phone', userData.phone);
+      await prefs.setString('user_role', userData.role);
+
+      // 🔥 Navigasi
       if (userData.role == 'admin') {
         Navigator.pushReplacementNamed(context, '/admin-home');
       } else {

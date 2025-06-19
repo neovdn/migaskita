@@ -33,9 +33,10 @@ class Routes {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // Auth
+      case '/': // Tambahkan ini
       case login:
         return MaterialPageRoute(builder: (_) => LoginPage());
+
       case signUp:
         return MaterialPageRoute(builder: (_) => SignUpPage());
 
@@ -59,7 +60,6 @@ class Routes {
       case adminProfile:
         return MaterialPageRoute(builder: (_) => AdminProfilePage());
 
-      // Default
       default:
         return MaterialPageRoute(
           builder:

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_migaskita/presentation/providers/user_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_migaskita/presentation/providers/user_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../widgets/custom_text_field.dart';
 import '../../widgets/custom_button.dart';
@@ -29,7 +30,6 @@ class _LoginPageState extends State<LoginPage> {
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
-    // Validasi
     if (email.isEmpty || password.isEmpty) {
       _showSnackBar('Email dan password harus diisi');
       return;
@@ -42,14 +42,19 @@ class _LoginPageState extends State<LoginPage> {
 
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final success = await authProvider.signInUser(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
+      email: email,
+      password: password,
       context: context,
     );
 
     if (success) {
       final userRole =
           Provider.of<UserProvider>(context, listen: false).user?.role;
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool('is_logged_in', true);
+      await prefs.setString('user_role', userRole ?? 'employee');
+
       if (userRole == 'admin') {
         Navigator.pushReplacementNamed(context, '/admin-home');
       } else {
@@ -67,7 +72,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
-            // agar tidak ketutupan keyboard
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -98,9 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
-                    onTap: () {
-                      // Arahkan ke halaman lupa password kalau ada
-                    },
+                    onTap: () {},
                     child: Text(
                       'Lupa Password?',
                       style: TextStyle(color: Color(0xFF324F5E)),

@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/bottom_nav_bar.dart';
@@ -25,57 +26,72 @@ class _EmployeeHomePageState extends State<EmployeeHomePage> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    final user = Provider.of<UserProvider>(context, listen: false).user;
+    debugPrint('📌 Masuk HomePage, user: $user');
+  }
+
+  @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context).user;
     final userName = user?.name ?? 'User';
 
-    return Scaffold(
-      backgroundColor: const Color(0xFFF5F7FB),
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: _selectedIndex,
-        onTap: _onNavBarTap,
-      ),
-      body: Stack(
-        children: [
-          Positioned(
-            top: 250,
-            left: 0,
-            right: 0,
-            height: 105,
-            child: ClipRRect(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                child: Container(
-                  color: const Color(0xFF0062FF).withOpacity(0.12),
+    return PopScope(
+      canPop: true,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          SystemNavigator.pop();
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFFF5F7FB),
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onNavBarTap,
+        ),
+        body: Stack(
+          children: [
+            Positioned(
+              top: 250,
+              left: 0,
+              right: 0,
+              height: 105,
+              child: ClipRRect(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                  child: Container(
+                    color: const Color(0xFF0062FF).withOpacity(0.12),
+                  ),
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: SharedHomePage(
-                userName: userName,
-                role: 'employee',
-                onNavToCalendar:
-                    () => Navigator.pushReplacementNamed(
-                      context,
-                      '/employee-calendar',
-                    ),
-                onNavToActivity:
-                    () => Navigator.pushReplacementNamed(
-                      context,
-                      '/employee-activity',
-                    ),
-                onNavToProfile:
-                    () => Navigator.pushReplacementNamed(
-                      context,
-                      '/employee-profile',
-                    ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: SharedHomePage(
+                  userName: userName,
+                  role: 'employee',
+                  onNavToCalendar:
+                      () => Navigator.pushReplacementNamed(
+                        context,
+                        '/employee-calendar',
+                      ),
+                  onNavToActivity:
+                      () => Navigator.pushReplacementNamed(
+                        context,
+                        '/employee-activity',
+                      ),
+                  onNavToProfile:
+                      () => Navigator.pushReplacementNamed(
+                        context,
+                        '/employee-profile',
+                      ),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
